@@ -2,13 +2,14 @@
 
 ## Fastest path: the .mcpb bundle (one-click, local)
 
-Every release ships an `odoo-mcp-<version>.mcpb` asset on the
-[GitHub releases page](https://github.com/erpipe-org/mcp-odoo/releases).
-Double-click it (or drag it into Claude Desktop → Settings → Extensions),
-fill in your Odoo URL, database, username, and API key in the dialog, and
-you're done — no JSON editing, no terminal. The bundle launches the server
-via [uv](https://docs.astral.sh/uv/), so `uv` must be installed
-(`brew install uv` on macOS). Credentials marked sensitive are stored by the
+Build the bundle with `python scripts/build_mcpb.py` (it lands in
+`dist/odoo-mcp-<version>.mcpb`). Double-click it (or drag it into Claude
+Desktop → Settings → Extensions), fill in your Odoo URL, database, username,
+and API key in the dialog, and you're done — no JSON editing, no terminal.
+The same dialog sets the transport (`xmlrpc` or `json2`), language, SSL
+verification, timeout, and whether writes are enabled. The bundle carries the
+server source and uses the `uv` runtime, so Claude Desktop installs Python
+and the dependencies itself. Credentials marked sensitive are stored by the
 OS keychain, not in a config file.
 
 Prefer manual configuration, or connecting to a *remote* server? Read on.

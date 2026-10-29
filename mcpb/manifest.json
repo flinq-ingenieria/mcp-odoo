@@ -1,0 +1,106 @@
+{
+  "$schema": "https://raw.githubusercontent.com/anthropics/mcpb/main/schemas/mcpb-manifest-v0.4.schema.json",
+  "manifest_version": "0.4",
+  "name": "odoo-mcp",
+  "display_name": "Odoo MCP",
+  "version": "1.3.2",
+  "description": "Talk to any Odoo 16+ database with zero Odoo-side setup. Local stdio MCP.",
+  "long_description": "Odoo MCP turns any Odoo 16+ database into a Model Context Protocol server using only your existing credentials — no App Store module, no admin access. Bounded reads, server-side aggregation, schema discovery, diagnostics, migration helpers, local BM25 knowledge search, accounting reports, and a gated write workflow with approval tokens and an audit trail. Speaks XML-RPC for Odoo 16-18 and External JSON-2 for Odoo 19+. Writes stay disabled unless you enable them in the settings.",
+  "author": {
+    "name": "Lê Anh Tuấn",
+    "email": "justin.le.1105@gmail.com",
+    "url": "https://github.com/tuanle96"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flinq-ingenieria/mcp-odoo.git"
+  },
+  "homepage": "https://github.com/flinq-ingenieria/mcp-odoo",
+  "documentation": "https://github.com/flinq-ingenieria/mcp-odoo#readme",
+  "support": "https://github.com/flinq-ingenieria/mcp-odoo/issues",
+  "license": "MIT",
+  "keywords": ["odoo", "erp", "accounting", "inventory", "crm", "json-2", "xml-rpc"],
+  "server": {
+    "type": "uv",
+    "entry_point": "src/odoo_mcp/__main__.py",
+    "mcp_config": {
+      "command": "uv",
+      "args": ["run", "--directory", "${__dirname}", "--no-dev", "odoo-mcp", "--transport", "stdio"],
+      "env": {
+        "ODOO_URL": "${user_config.odoo_url}",
+        "ODOO_DB": "${user_config.odoo_db}",
+        "ODOO_USERNAME": "${user_config.odoo_username}",
+        "ODOO_PASSWORD": "${user_config.odoo_password}",
+        "ODOO_TRANSPORT": "${user_config.odoo_transport}",
+        "ODOO_LOCALE": "${user_config.odoo_locale}",
+        "ODOO_VERIFY_SSL": "${user_config.odoo_verify_ssl}",
+        "ODOO_TIMEOUT": "${user_config.odoo_timeout}",
+        "ODOO_MCP_ENABLE_WRITES": "${user_config.odoo_enable_writes}"
+      }
+    }
+  },
+  "user_config": {
+    "odoo_url": {
+      "type": "string",
+      "title": "Odoo URL",
+      "description": "Full URL of your Odoo server, e.g. https://mycompany.odoo.com",
+      "required": true
+    },
+    "odoo_db": {
+      "type": "string",
+      "title": "Database name",
+      "description": "The Odoo database to connect to",
+      "required": true
+    },
+    "odoo_username": {
+      "type": "string",
+      "title": "Username",
+      "description": "Your Odoo login (usually an email address)",
+      "required": true
+    },
+    "odoo_password": {
+      "type": "string",
+      "title": "API key or password",
+      "description": "An Odoo API key (Settings → My Profile → Account Security) is safer than a password. JSON-2 needs an API key.",
+      "sensitive": true,
+      "required": true
+    },
+    "odoo_transport": {
+      "type": "string",
+      "title": "Transport",
+      "description": "xmlrpc for Odoo 16-18, json2 for Odoo 19+.",
+      "default": "xmlrpc"
+    },
+    "odoo_locale": {
+      "type": "string",
+      "title": "Language",
+      "description": "Optional Odoo language code for results, e.g. es_ES. Leave empty for the user's language.",
+      "default": ""
+    },
+    "odoo_verify_ssl": {
+      "type": "boolean",
+      "title": "Verify SSL certificate",
+      "description": "Turn off only for servers with a self-signed certificate.",
+      "default": true
+    },
+    "odoo_timeout": {
+      "type": "number",
+      "title": "Timeout (seconds)",
+      "description": "Timeout for each request to Odoo.",
+      "default": 30,
+      "min": 1,
+      "max": 600
+    },
+    "odoo_enable_writes": {
+      "type": "boolean",
+      "title": "Enable writes",
+      "description": "Allow creating, updating and deleting records. Every write still needs an approval token from a preview step.",
+      "default": false
+    }
+  },
+  "tools_generated": true,
+  "compatibility": {
+    "platforms": ["darwin", "win32", "linux"],
+    "runtimes": { "python": ">=3.10" }
+  }
+}
